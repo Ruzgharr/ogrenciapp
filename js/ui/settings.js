@@ -138,30 +138,39 @@ function buildGoalSection() {
     min: 0,
     max: 10,
     step: 1,
-    unit: 'yanlış = 1 net',
+    unit: 'yanlış 1 doğru',
     onChange: (value) => store.updateSettings({ netPenalty: value }),
   });
 
+  const uniInput = el('input', {
+    type: 'text',
+    class: 'input',
+    placeholder: 'Örn: ODTÜ Bilgisayar',
+    value: settings.targetUniversity || '',
+    style: { maxWidth: '160px', textAlign: 'right' }
+  });
+  uniInput.addEventListener('change', () => {
+    store.updateSettings({ targetUniversity: uniInput.value.trim() });
+    haptics.success();
+  });
+
   return card(
-    'Hedefler',
-    el(
-      'div',
-      { class: 'field' },
-      el('span', { class: 'field-label', text: 'Günlük çalışma hedefi' }),
-      goalControl.element,
-      picks.element,
-    ),
-    el('div', { class: 'divider' }),
-    el(
-      'div',
-      { class: 'field' },
-      el('span', { class: 'field-label', text: 'Net katsayısı' }),
-      penaltyControl.element,
-      el('p', {
-        class: 'field-hint',
-        text: 'net = doğru − (yanlış ÷ katsayı). 0 yaparsan yanlışlar net götürmez.',
-      }),
-    ),
+    'Hedefler & Netler',
+    settingRow({
+      title: 'Hedef Üniversite / Bölüm',
+      description: 'Sana ilham vermesi için ana ekranda durur',
+      control: uniInput,
+    }),
+    settingRow({
+      title: 'Günlük Çalışma Hedefi',
+      description: 'Hedefe ulaşınca konfeti patlar.',
+      control: el('div', { style: { display: 'flex', flexDirection: 'column', gap: '8px', alignItems: 'flex-end' } }, goalControl.element, picks.element),
+    }),
+    settingRow({
+      title: 'Net Hesaplama Kuralı',
+      description: 'Denemelerde ve soru kayıtlarında (varsayılan: 4)',
+      control: penaltyControl.element,
+    }),
   );
 }
 

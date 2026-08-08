@@ -13,7 +13,7 @@ import * as timer from '../timer.js';
 import * as notify from '../platform/notify.js';
 import * as haptics from '../platform/haptics.js';
 import * as snack from './snack.js';
-import { todayKey, formatDayLong } from '../core/dates.js';
+import { todayKey, formatDayLong, relativeDayLabel } from '../core/dates.js';
 import { formatMinutes, formatClock, formatPercent } from '../core/format.js';
 import {
   onDay,
@@ -88,9 +88,10 @@ function buildHeader(key) {
     { class: 'screen-head' },
     el(
       'div',
-      {},
-      el('p', { class: 'eyebrow', text: formatDayLong(key) }),
-      el('h1', { text: 'Bugün' }),
+      { class: 'screen-head-text' },
+      el('p', { class: 'eyebrow', text: relativeDayLabel(key, todayKey()) }),
+      el('h1', { text: formatDayLong(key) }),
+      store.settings().targetUniversity ? el('p', { class: 'text-sm text-muted', style: { marginTop: '4px', fontStyle: 'italic', color: 'var(--brand)' }, text: `🎯 Hedef: ${store.settings().targetUniversity}` }) : null
     ),
     rightSide
   );
