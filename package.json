@@ -1,0 +1,12 @@
+{
+  "name": "yks-takip",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Kisisel YKS calisma takip uygulamasi. Build adimi yok, bagimlilik yok.",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "test": "node --test test/*.test.js",
+    "icons": "node tools/make-icons.mjs"
+  }
+}

@@ -1,0 +1,246 @@
+/* Uygulama iskeleti: kaydirilabilir icerik + sabit alt gezinme.
+   Mobil oncelikli. Ana aksiyonlar ekranin alt yarisinda. */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  max-width: var(--maxw);
+  margin: 0 auto;
+}
+
+.app[hidden] {
+  display: none;
+}
+
+.screens {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.screen {
+  position: absolute;
+  inset: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  padding: calc(var(--safe-top) + 12px) var(--pad) 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+@media (min-width: 720px) {
+  .dashboard-grid {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    gap: 24px;
+    align-items: start;
+  }
+  
+  #screen-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    align-items: start;
+  }
+  #screen-stats > .screen-head,
+  #screen-stats > .timer-dock {
+    grid-column: 1 / -1;
+  }
+}
+
+.dashboard-col {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+@media (max-width: 719px) {
+  .dashboard-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+}
+
+.screen[hidden] {
+  display: none;
+}
+
+/* Sekme gecisi: kisa kayma + solma. 170 ms, abartisiz. */
+.screen.is-entering {
+  animation: screen-in var(--dur) var(--ease);
+}
+
+@keyframes screen-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Alt gezinme */
+.tabbar {
+  flex: 0 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  padding: 6px 6px calc(6px + var(--safe-bottom));
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-top: 1px solid var(--border-soft);
+}
+
+@media (orientation: landscape) {
+  .app {
+    flex-direction: row;
+  }
+  .tabbar {
+    order: -1;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(4, auto);
+    align-content: center;
+    gap: 16px;
+    padding: var(--safe-top) 8px var(--safe-bottom) calc(8px + var(--safe-left));
+    border-top: none;
+    border-right: 1px solid var(--border-soft);
+    min-width: 76px;
+  }
+}
+
+.tab {
+  position: relative;
+  min-height: var(--tap);
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 3px;
+  padding: 6px 2px;
+  border-radius: var(--radius-sm);
+  color: var(--text-faint);
+  font-size: 0.7rem;
+  font-weight: 550;
+  letter-spacing: 0.01em;
+  transition: color var(--dur-fast) var(--ease), background var(--dur-fast) var(--ease);
+}
+
+.tab svg {
+  width: 23px;
+  height: 23px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.tab.is-active {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.tab:active {
+  transform: scale(0.96);
+}
+
+.tab-badge {
+  position: absolute;
+  top: 2px;
+  right: calc(50% - 20px);
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.63rem;
+  font-weight: 700;
+  line-height: 17px;
+  text-align: center;
+}
+
+/* Ekran basligi */
+.screen-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.screen-head .eyebrow {
+  color: var(--text-faint);
+  font-size: 0.78rem;
+  font-weight: 550;
+  text-transform: none;
+}
+
+.screen-head h1 {
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+/* Bolum */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  min-height: 24px;
+}
+
+.section-head h2 {
+  font-size: 0.92rem;
+  color: var(--text-dim);
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.row-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.grow {
+  flex: 1;
+  min-width: 0;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+/* Kronometre kartini ekranin alt yarisina sabitleyen bosluk */
+.spacer {
+  flex: 1;
+  min-height: 4px;
+}
