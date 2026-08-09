@@ -236,7 +236,7 @@ function startStudySession(words) {
   }
 
   const container = el('div', { style: { minHeight: '300px' } });
-  openSheet('Kelime Çalışması', container);
+  openSheet({ title: 'Kelime Çalışması', body: container });
   renderCard(container);
 }
 
@@ -247,15 +247,26 @@ function buildListSection(allWords) {
 
   // İleri tarihli tekrarları siralama
   allWords.sort((a, b) => (a.nextReview || 0) - (b.nextReview || 0)).forEach(w => {
+    const deleteBtn = el('button', { class: 'btn btn-icon btn-ghost', style: { color: '#f87171', marginLeft: '8px' } }, icon('trash-2', 18));
+    deleteBtn.addEventListener('click', () => {
+      store.remove('words', w.id);
+      haptics.success();
+      snack.toast('Kelime silindi');
+      rebuild();
+    });
+
     const card = el('div', { class: 'card', style: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' } },
-      el('div', {}, 
+      el('div', { style: { flex: 1 } }, 
         el('strong', { text: w.word }),
         el('p', { class: 'text-sm text-muted', text: w.meaning })
       ),
-      el('div', { class: 'text-sm text-muted', style: { textAlign: 'right' } },
-        el('span', { text: w.level > 0 ? `Seviye ${w.level}` : 'Yeni' }),
-        el('br'),
-        el('span', { text: w.nextReview > Date.now() ? `${Math.ceil((w.nextReview - Date.now())/86400000)} gün sonra` : 'Şimdi' })
+      el('div', { style: { display: 'flex', alignItems: 'center' } },
+        el('div', { class: 'text-sm text-muted', style: { textAlign: 'right' } },
+          el('span', { text: w.level > 0 ? `Seviye ${w.level}` : 'Yeni' }),
+          el('br'),
+          el('span', { text: w.nextReview > Date.now() ? `${Math.ceil((w.nextReview - Date.now())/86400000)} gün sonra` : 'Şimdi' })
+        ),
+        deleteBtn
       )
     );
     list.appendChild(card);

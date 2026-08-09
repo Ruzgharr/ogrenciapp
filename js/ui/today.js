@@ -486,9 +486,12 @@ function buildActiveTimer() {
                     app.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${bg})`;
                     app.style.backgroundSize = 'cover';
                     app.style.backgroundPosition = 'center';
+                  } else {
+                    app.style.backgroundColor = 'var(--bg)';
                   }
                 } else {
                   app.style.backgroundImage = '';
+                  app.style.backgroundColor = '';
                 }
               } },
             },
@@ -616,6 +619,7 @@ async function finishTimer() {
   if (app) {
     app.classList.remove('is-focus-mode');
     app.style.backgroundImage = '';
+    app.style.backgroundColor = '';
   }
   const result = await timer.finish();
   if (result.saved) {
@@ -630,6 +634,7 @@ function cancelTimer() {
   if (app) {
     app.classList.remove('is-focus-mode');
     app.style.backgroundImage = '';
+    app.style.backgroundColor = '';
   }
   const view = timer.display();
   const elapsedMinutes = view ? Math.round(view.elapsedMs / 60000) : 0;
