@@ -1387,7 +1387,7 @@ textarea.input {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: transparent;
+  background: #000;
   z-index: 100;
 }
 .app.is-focus-mode .timer-card {

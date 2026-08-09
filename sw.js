@@ -6,7 +6,7 @@
 //
 // Surum degistiginde CACHE_VERSION artirilir, eski onbellekler silinir.
 
-const CACHE_VERSION = 'v6';
+const CACHE_VERSION = 'v7';
 const CACHE_NAME = `yks-takip-${CACHE_VERSION}`;
 
 const PRECACHE = [

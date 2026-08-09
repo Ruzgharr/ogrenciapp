@@ -483,25 +483,20 @@ function buildActiveTimer() {
                 if (isFocus) {
                   const bg = store.settings().focusBgBase64;
                   if (bg) {
-                    document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url("${bg}")`;
-                    document.body.style.backgroundSize = 'cover';
-                    document.body.style.backgroundPosition = 'center';
-                    document.body.style.backgroundAttachment = 'fixed';
-                  } else {
-                    document.body.style.background = '#000';
+                    const dock = app.querySelector('.timer-dock');
+                    if (dock) {
+                      dock.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url("${bg}")`;
+                      dock.style.backgroundSize = 'cover';
+                      dock.style.backgroundPosition = 'center';
+                    }
                   }
-                  app.style.background = 'transparent';
-                  const screens = document.getElementById('screens');
-                  if (screens) screens.style.background = 'transparent';
                 } else {
-                  document.body.style.background = '';
-                  document.body.style.backgroundImage = '';
-                  document.body.style.backgroundSize = '';
-                  document.body.style.backgroundPosition = '';
-                  document.body.style.backgroundAttachment = '';
-                  app.style.background = '';
-                  const screens = document.getElementById('screens');
-                  if (screens) screens.style.background = '';
+                  const dock = app.querySelector('.timer-dock');
+                  if (dock) {
+                    dock.style.backgroundImage = '';
+                    dock.style.backgroundSize = '';
+                    dock.style.backgroundPosition = '';
+                  }
                 }
               } },
             },
@@ -626,17 +621,14 @@ function buildMetaText(view) {
 
 function exitFocusMode() {
   const app = document.getElementById('app');
-  if (app) {
-    app.classList.remove('is-focus-mode');
-    app.style.background = '';
+  if (!app) return;
+  const dock = app.querySelector('.timer-dock');
+  if (dock) {
+    dock.style.backgroundImage = '';
+    dock.style.backgroundSize = '';
+    dock.style.backgroundPosition = '';
   }
-  const screens = document.getElementById('screens');
-  if (screens) screens.style.background = '';
-  document.body.style.background = '';
-  document.body.style.backgroundImage = '';
-  document.body.style.backgroundSize = '';
-  document.body.style.backgroundPosition = '';
-  document.body.style.backgroundAttachment = '';
+  app.classList.remove('is-focus-mode');
 }
 
 async function finishTimer() {
