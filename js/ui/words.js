@@ -247,7 +247,7 @@ function buildListSection(allWords) {
 
   // İleri tarihli tekrarları siralama
   allWords.sort((a, b) => (a.nextReview || 0) - (b.nextReview || 0)).forEach(w => {
-    const deleteBtn = el('button', { class: 'btn btn-icon btn-ghost', style: { color: '#f87171', marginLeft: '8px' } }, icon('trash-2', 18));
+    const deleteBtn = el('button', { class: 'btn btn-icon btn-ghost', style: { color: '#f87171', marginLeft: '8px' } }, icon('trash', 18));
     deleteBtn.addEventListener('click', () => {
       store.softDelete('words', w.id);
       haptics.success();
