@@ -502,7 +502,9 @@ function buildActiveTimer() {
                       dock.style.backgroundPosition = 'center';
                     }
                   }
+                  startFocusAutoHide();
                 } else {
+                  stopFocusAutoHide();
                   const dock = app.querySelector('.timer-dock');
                   if (dock) {
                     dock.style.backgroundImage = '';
@@ -563,6 +565,12 @@ function buildActiveTimer() {
         text: 'Bu tur uygulama kapalıyken doldu. Ne kadar ara verdiğini bilemediğim için sayacı kendiliğinden ilerletmedim.',
       }),
     );
+  }
+
+  // Hedef üniversite yazısı (varsa)
+  const targetUni = store.settings().targetUniversity;
+  if (targetUni) {
+    card.appendChild(el('div', { class: 'focus-target-uni', text: targetUni }));
   }
 
   const buttons = el('div', { class: 'btn-row' });
@@ -631,7 +639,41 @@ function buildMetaText(view) {
   return parts.join(' · ');
 }
 
+// ---------------------------------------------------------------- odak modu kontrol gizleme
+let focusHideTimer = null;
+const FOCUS_HIDE_DELAY = 4000; // 4 saniye hareketsizlik
+
+function onFocusActivity() {
+  const app = document.getElementById('app');
+  if (!app || !app.classList.contains('is-focus-mode')) return;
+  app.classList.remove('focus-controls-hidden');
+  clearTimeout(focusHideTimer);
+  focusHideTimer = setTimeout(() => {
+    if (app.classList.contains('is-focus-mode')) {
+      app.classList.add('focus-controls-hidden');
+    }
+  }, FOCUS_HIDE_DELAY);
+}
+
+function startFocusAutoHide() {
+  document.addEventListener('touchstart', onFocusActivity, { passive: true });
+  document.addEventListener('mousemove', onFocusActivity, { passive: true });
+  document.addEventListener('click', onFocusActivity, { passive: true });
+  onFocusActivity(); // ilk zamanlayıcıyı başlat
+}
+
+function stopFocusAutoHide() {
+  clearTimeout(focusHideTimer);
+  focusHideTimer = null;
+  document.removeEventListener('touchstart', onFocusActivity);
+  document.removeEventListener('mousemove', onFocusActivity);
+  document.removeEventListener('click', onFocusActivity);
+  const app = document.getElementById('app');
+  if (app) app.classList.remove('focus-controls-hidden');
+}
+
 function exitFocusMode() {
+  stopFocusAutoHide();
   const app = document.getElementById('app');
   if (!app) return;
   const dock = app.querySelector('.timer-dock');

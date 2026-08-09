@@ -1390,6 +1390,8 @@ textarea.input {
   background: #000;
   z-index: 100;
 }
+
+/* --- timer kart: tam ekran, seffaf --- */
 .app.is-focus-mode .timer-card {
   width: 100%;
   height: 100%;
@@ -1403,41 +1405,130 @@ textarea.input {
   align-items: center;
   border-radius: 0;
   padding: 24px;
+  position: relative;
 }
 .app.is-focus-mode .timer-card.is-running {
   animation: none;
   border-color: transparent;
   box-shadow: none;
 }
+
+/* --- ust bar: ders + butonlar --- */
 .app.is-focus-mode .timer-top {
   position: absolute;
-  top: max(24px, var(--safe-top));
-  left: max(24px, var(--safe-left));
-  right: max(24px, var(--safe-right));
+  top: max(20px, var(--safe-top));
+  left: max(20px, var(--safe-left));
+  right: max(20px, var(--safe-right));
   width: auto;
+  transition: opacity 0.5s ease;
 }
+
+/* --- saat: hero eleman --- */
 .app.is-focus-mode .timer-clock {
-  font-size: clamp(4.5rem, 15vw, 9rem);
-  font-weight: 200;
-  letter-spacing: -2px;
+  font-size: clamp(5rem, 18vw, 10rem);
+  font-weight: 100;
+  letter-spacing: -3px;
   line-height: 1;
+  text-shadow: 0 0 80px rgba(109, 143, 255, 0.15);
+  transition: text-shadow 0.8s ease;
 }
+
+/* calısırken hafif nefes alıp veren ısık efekti */
+.app.is-focus-mode .timer-card.is-running .timer-clock {
+  animation: focus-breathe 4s ease-in-out infinite;
+}
+
+@keyframes focus-breathe {
+  0%, 100% { text-shadow: 0 0 60px rgba(109, 143, 255, 0.12), 0 0 120px rgba(109, 143, 255, 0.05); }
+  50%      { text-shadow: 0 0 80px rgba(109, 143, 255, 0.25), 0 0 160px rgba(109, 143, 255, 0.1); }
+}
+
+/* --- meta bilgi --- */
 .app.is-focus-mode .timer-meta {
-  font-size: 1.1rem;
-  margin-top: 16px;
-  opacity: 0.6;
+  font-size: 1rem;
+  margin-top: 12px;
+  opacity: 0.45;
+  font-weight: 300;
+  letter-spacing: 0.5px;
 }
+
+/* --- hedef üniversite yazısı --- */
+.focus-target-uni {
+  position: absolute;
+  bottom: max(56px, calc(env(safe-area-inset-bottom) + 48px));
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 400;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  transition: opacity 0.5s ease;
+}
+
+/* --- buton satırı: glassmorphism --- */
+.app.is-focus-mode .btn-row {
+  margin-top: 32px;
+  gap: 12px;
+  transition: opacity 0.5s ease;
+}
+.app.is-focus-mode .btn-row .btn {
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-weight: 500;
+  border-radius: 14px;
+  padding: 14px 24px;
+  font-size: 0.95rem;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+.app.is-focus-mode .btn-row .btn:active {
+  transform: scale(0.96);
+}
+.app.is-focus-mode .btn-row .btn-success {
+  background: rgba(53, 211, 153, 0.18);
+  border-color: rgba(53, 211, 153, 0.25);
+  color: var(--success);
+}
+.app.is-focus-mode .btn-row .btn-success:active {
+  background: rgba(53, 211, 153, 0.28);
+}
+
+/* --- kontrol otomatik gizleme: .focus-controls-hidden --- */
+.app.is-focus-mode.focus-controls-hidden .timer-top,
+.app.is-focus-mode.focus-controls-hidden .btn-row,
+.app.is-focus-mode.focus-controls-hidden .focus-target-uni {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* --- phase bar --- */
 .app.is-focus-mode .timer-phase-bar {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 3px;
   border-radius: 0;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.04);
 }
 .app.is-focus-mode .timer-phase-bar > i {
   border-radius: 0;
+}
+
+/* --- uyarı notları odak modunda --- */
+.app.is-focus-mode .note-warn {
+  position: absolute;
+  bottom: max(90px, calc(env(safe-area-inset-bottom) + 80px));
+  left: 24px;
+  right: 24px;
+  text-align: center;
+  font-size: 0.82rem;
+  opacity: 0.6;
 }
 
 /* ---------------------------------------------------------------- png disari aktarim */
