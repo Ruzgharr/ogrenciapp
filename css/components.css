@@ -1455,11 +1455,11 @@ textarea.input {
 /* --- hedef üniversite yazısı --- */
 .focus-target-uni {
   position: absolute;
-  bottom: max(56px, calc(env(safe-area-inset-bottom) + 48px));
-  left: 0;
-  right: 0;
+  bottom: max(20px, env(safe-area-inset-bottom, 16px));
+  left: 24px;
+  right: 24px;
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   font-weight: 400;
   letter-spacing: 1.5px;
   text-transform: uppercase;
