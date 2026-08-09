@@ -567,12 +567,6 @@ function buildActiveTimer() {
     );
   }
 
-  // Hedef üniversite yazısı (varsa)
-  const targetUni = store.settings().targetUniversity;
-  if (targetUni) {
-    card.appendChild(el('div', { class: 'focus-target-uni', text: targetUni }));
-  }
-
   const buttons = el('div', { class: 'btn-row' });
 
   if (view.awaitingContinue) {
@@ -620,6 +614,13 @@ function buildActiveTimer() {
   );
 
   card.appendChild(buttons);
+
+  // Hedef üniversite yazısı (varsa)
+  const targetUni = store.settings().targetUniversity;
+  if (targetUni) {
+    card.appendChild(el('div', { class: 'focus-target-uni', text: targetUni }));
+  }
+
   return card;
 }
 
