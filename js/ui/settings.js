@@ -197,8 +197,64 @@ function buildPomodoroSection() {
     onChange: (value) => savePomodoro({ breakMinutes: value }),
   });
 
+  const bgInput = el('input', { type: 'file', accept: 'image/*', style: { display: 'none' } });
+  
+  const bgBtn = el('button', { class: 'btn btn-outline', text: 'Resim Seç' });
+  const bgRemoveBtn = el('button', { class: 'btn btn-ghost', text: 'Kaldır', style: { display: store.settings().focusBgBase64 ? 'inline-block' : 'none', color: '#f87171' } });
+  
+  bgBtn.addEventListener('click', () => bgInput.click());
+  
+  bgInput.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Max genislik/yukseklik
+        const MAX_W = 1080;
+        const MAX_H = 1920;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > height) {
+          if (width > MAX_W) {
+            height *= MAX_W / width;
+            width = MAX_W;
+          }
+        } else {
+          if (height > MAX_H) {
+            width *= MAX_H / height;
+            height = MAX_H;
+          }
+        }
+        
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, 0, 0, width, height);
+        
+        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6); // %60 kalite
+        store.updateSettings({ focusBgBase64: compressedBase64 });
+        snack.success('Arkaplan başarıyla güncellendi!');
+        rebuild();
+      };
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+
+  bgRemoveBtn.addEventListener('click', () => {
+    store.updateSettings({ focusBgBase64: null });
+    snack.success('Arkaplan kaldırıldı!');
+    rebuild();
+  });
+
   return card(
-    'Pomodoro',
+    'Odak Modu & Pomodoro',
     el('div', { class: 'grid-2' }, workControl.element, breakControl.element),
     settingRow({
       title: 'Mola kendiliğinden başlasın',
@@ -210,6 +266,11 @@ function buildPomodoroSection() {
       description: 'Kapalıysa mola bitince "devam et" dokunuşunu bekler.',
       control: toggle(pomodoro.autoStartWork === true, (value) => savePomodoro({ autoStartWork: value })),
     }),
+    settingRow({
+      title: 'Odak Modu Arkaplan Resmi',
+      description: 'Kronometrede odak modundayken arkada görünecek resim.',
+      control: el('div', { style: { display: 'flex', gap: '8px' } }, bgInput, bgBtn, bgRemoveBtn),
+    })
   );
 }
 

@@ -480,8 +480,16 @@ function buildActiveTimer() {
               on: { click: () => {
                 const app = document.getElementById('app');
                 const isFocus = app.classList.toggle('is-focus-mode');
-                // switch icon dynamically? It's fine to just use maximize icon or toggle it.
-                // for simplicity, we just leave it.
+                if (isFocus) {
+                  const bg = store.settings().focusBgBase64;
+                  if (bg) {
+                    app.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${bg})`;
+                    app.style.backgroundSize = 'cover';
+                    app.style.backgroundPosition = 'center';
+                  }
+                } else {
+                  app.style.backgroundImage = '';
+                }
               } },
             },
             icon('maximize', 19),
@@ -604,7 +612,11 @@ function buildMetaText(view) {
 }
 
 async function finishTimer() {
-  document.getElementById('app')?.classList.remove('is-focus-mode');
+  const app = document.getElementById('app');
+  if (app) {
+    app.classList.remove('is-focus-mode');
+    app.style.backgroundImage = '';
+  }
   const result = await timer.finish();
   if (result.saved) {
     snack.success(`${formatMinutes(result.minutes)} kaydedildi`);
@@ -614,7 +626,11 @@ async function finishTimer() {
 }
 
 function cancelTimer() {
-  document.getElementById('app')?.classList.remove('is-focus-mode');
+  const app = document.getElementById('app');
+  if (app) {
+    app.classList.remove('is-focus-mode');
+    app.style.backgroundImage = '';
+  }
   const view = timer.display();
   const elapsedMinutes = view ? Math.round(view.elapsedMs / 60000) : 0;
   timer.cancel();

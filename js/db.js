@@ -7,7 +7,7 @@
 // Yeni alan eklendiginde mevcut veri SILINMEZ, sadece donusturulur.
 
 export const DB_NAME = 'yks-takip';
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 2;
 
 export const STORE = {
   subjects: 'subjects',
@@ -17,6 +17,7 @@ export const STORE = {
   tasks: 'tasks',
   habits: 'habits',
   habitLogs: 'habitLogs',
+  words: 'words',
   settings: 'settings',
   meta: 'meta',
 };
@@ -30,6 +31,7 @@ export const DATA_STORES = [
   STORE.tasks,
   STORE.habits,
   STORE.habitLogs,
+  STORE.words,
   STORE.settings,
 ];
 
@@ -77,11 +79,10 @@ const MIGRATIONS = {
     db.createObjectStore(STORE.meta, { keyPath: 'key' });
   },
 
-  // Sonraki surumler buraya eklenecek. Ornek:
-  // 2(db, tx) {
-  //   const store = tx.objectStore(STORE.studySessions);
-  //   store.createIndex('topic', 'topic');
-  // },
+  2(db) {
+    const words = db.createObjectStore(STORE.words, { keyPath: 'id' });
+    words.createIndex('nextReview', 'nextReview');
+  },
 };
 
 let dbPromise = null;

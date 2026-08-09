@@ -14,12 +14,14 @@ import { pendingTaskCount } from './core/stats.js';
 import * as todayScreen from './ui/today.js';
 import * as statsScreen from './ui/stats.js';
 import * as tasksScreen from './ui/tasks.js';
+import * as wordsScreen from './ui/words.js';
 import * as settingsScreen from './ui/settings.js';
 
 const SCREENS = {
   today: { module: todayScreen, selector: '#screen-today' },
   stats: { module: statsScreen, selector: '#screen-stats' },
   tasks: { module: tasksScreen, selector: '#screen-tasks' },
+  words: { module: wordsScreen, selector: '#screen-words' },
   settings: { module: settingsScreen, selector: '#screen-settings' },
 };
 
@@ -28,6 +30,7 @@ const TAB_ALIASES = {
   bugun: 'today',
   istatistik: 'stats',
   gorevler: 'tasks',
+  kelimeler: 'words',
   ayarlar: 'settings',
 };
 
@@ -182,6 +185,24 @@ function attachLifecycle() {
       renderScreen(activeTab);
     }
   }, 60000);
+
+  // Kelime Hatirlatici (Saat Basi)
+  setInterval(() => {
+    const now = Date.now();
+    // Gece 23:00 ile 08:00 arasi bildirim atma
+    const hour = new Date().getHours();
+    if (hour < 8 || hour >= 23) return;
+
+    const pending = store.words().filter(w => !w.nextReview || w.nextReview <= now);
+    if (pending.length > 0) {
+      const lastReminder = parseInt(sessionStorage.getItem('lastWordReminder') || '0', 10);
+      // En son 1 saat once hatirlatildiysa (3600000 ms)
+      if (now - lastReminder > 3600000) {
+        notify.send('Kelime Vakti!', { body: `${pending.length} kelime tekrar edilmeyi bekliyor.` });
+        sessionStorage.setItem('lastWordReminder', now.toString());
+      }
+    }
+  }, 60000 * 5); // Her 5 dakikada bir kontrol et
 
   timer.onPhaseEnd(() => {
     renderScreen(activeTab);

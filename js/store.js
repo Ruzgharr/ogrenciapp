@@ -20,6 +20,7 @@ const COLLECTION_STORES = {
   tasks: db.STORE.tasks,
   habits: db.STORE.habits,
   habitLogs: db.STORE.habitLogs,
+  words: db.STORE.words,
 };
 
 export const COLLECTIONS = Object.keys(COLLECTION_STORES);
@@ -36,6 +37,7 @@ export const state = {
   tasks: [],
   habits: [],
   habitLogs: [],
+  words: [],
   settings: null,
   meta: {},
 };
@@ -198,6 +200,10 @@ export function habits() {
 
 export function habitLogs() {
   return list('habitLogs');
+}
+
+export function words() {
+  return list('words');
 }
 
 export function find(collection, id) {
