@@ -6,7 +6,7 @@
 //
 // Surum degistiginde CACHE_VERSION artirilir, eski onbellekler silinir.
 
-const CACHE_VERSION = 'v5';
+const CACHE_VERSION = 'v6';
 const CACHE_NAME = `yks-takip-${CACHE_VERSION}`;
 
 const PRECACHE = [
@@ -46,6 +46,7 @@ const PRECACHE = [
   './js/ui/stats.js',
   './js/ui/tasks.js',
   './js/ui/settings.js',
+  './js/ui/words.js',
   './js/ui/sheets/subjects.js',
   './js/ui/sheets/records.js',
   './js/ui/sheets/tasks.js',

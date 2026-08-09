@@ -483,18 +483,25 @@ function buildActiveTimer() {
                 if (isFocus) {
                   const bg = store.settings().focusBgBase64;
                   if (bg) {
-                    document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("${bg}")`;
+                    document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url("${bg}")`;
                     document.body.style.backgroundSize = 'cover';
                     document.body.style.backgroundPosition = 'center';
                     document.body.style.backgroundAttachment = 'fixed';
-                    app.style.background = 'transparent';
                   } else {
-                    document.body.style.backgroundColor = 'var(--bg)';
+                    document.body.style.background = '#000';
                   }
+                  app.style.background = 'transparent';
+                  const screens = document.getElementById('screens');
+                  if (screens) screens.style.background = 'transparent';
                 } else {
+                  document.body.style.background = '';
                   document.body.style.backgroundImage = '';
-                  document.body.style.backgroundColor = '';
+                  document.body.style.backgroundSize = '';
+                  document.body.style.backgroundPosition = '';
+                  document.body.style.backgroundAttachment = '';
                   app.style.background = '';
+                  const screens = document.getElementById('screens');
+                  if (screens) screens.style.background = '';
                 }
               } },
             },
@@ -617,14 +624,23 @@ function buildMetaText(view) {
   return parts.join(' · ');
 }
 
-async function finishTimer() {
+function exitFocusMode() {
   const app = document.getElementById('app');
   if (app) {
     app.classList.remove('is-focus-mode');
     app.style.background = '';
-    document.body.style.backgroundImage = '';
-    document.body.style.backgroundColor = '';
   }
+  const screens = document.getElementById('screens');
+  if (screens) screens.style.background = '';
+  document.body.style.background = '';
+  document.body.style.backgroundImage = '';
+  document.body.style.backgroundSize = '';
+  document.body.style.backgroundPosition = '';
+  document.body.style.backgroundAttachment = '';
+}
+
+async function finishTimer() {
+  exitFocusMode();
   const result = await timer.finish();
   if (result.saved) {
     snack.success(`${formatMinutes(result.minutes)} kaydedildi`);
@@ -634,13 +650,7 @@ async function finishTimer() {
 }
 
 function cancelTimer() {
-  const app = document.getElementById('app');
-  if (app) {
-    app.classList.remove('is-focus-mode');
-    app.style.background = '';
-    document.body.style.backgroundImage = '';
-    document.body.style.backgroundColor = '';
-  }
+  exitFocusMode();
   const view = timer.display();
   const elapsedMinutes = view ? Math.round(view.elapsedMs / 60000) : 0;
   timer.cancel();
