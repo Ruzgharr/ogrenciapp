@@ -483,15 +483,18 @@ function buildActiveTimer() {
                 if (isFocus) {
                   const bg = store.settings().focusBgBase64;
                   if (bg) {
-                    app.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${bg})`;
-                    app.style.backgroundSize = 'cover';
-                    app.style.backgroundPosition = 'center';
+                    document.body.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url("${bg}")`;
+                    document.body.style.backgroundSize = 'cover';
+                    document.body.style.backgroundPosition = 'center';
+                    document.body.style.backgroundAttachment = 'fixed';
+                    app.style.background = 'transparent';
                   } else {
-                    app.style.backgroundColor = 'var(--bg)';
+                    document.body.style.backgroundColor = 'var(--bg)';
                   }
                 } else {
-                  app.style.backgroundImage = '';
-                  app.style.backgroundColor = '';
+                  document.body.style.backgroundImage = '';
+                  document.body.style.backgroundColor = '';
+                  app.style.background = '';
                 }
               } },
             },
@@ -618,8 +621,9 @@ async function finishTimer() {
   const app = document.getElementById('app');
   if (app) {
     app.classList.remove('is-focus-mode');
-    app.style.backgroundImage = '';
-    app.style.backgroundColor = '';
+    app.style.background = '';
+    document.body.style.backgroundImage = '';
+    document.body.style.backgroundColor = '';
   }
   const result = await timer.finish();
   if (result.saved) {
@@ -633,8 +637,9 @@ function cancelTimer() {
   const app = document.getElementById('app');
   if (app) {
     app.classList.remove('is-focus-mode');
-    app.style.backgroundImage = '';
-    app.style.backgroundColor = '';
+    app.style.background = '';
+    document.body.style.backgroundImage = '';
+    document.body.style.backgroundColor = '';
   }
   const view = timer.display();
   const elapsedMinutes = view ? Math.round(view.elapsedMs / 60000) : 0;

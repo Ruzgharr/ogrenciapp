@@ -123,6 +123,7 @@ export async function init() {
   state.tasks = data[db.STORE.tasks] || [];
   state.habits = data[db.STORE.habits] || [];
   state.habitLogs = data[db.STORE.habitLogs] || [];
+  state.words = data[db.STORE.words] || [];
   state.meta = Object.fromEntries((metaRows || []).map((row) => [row.key, row.value]));
 
   const storedSettings = (data[db.STORE.settings] || [])[0] || null;
