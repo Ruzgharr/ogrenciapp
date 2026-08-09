@@ -327,6 +327,18 @@ function buildTimerDock() {
   const dock = el('div', { class: 'timer-dock' });
   const active = timer.getActive();
   dock.appendChild(active ? buildActiveTimer() : buildIdleTimer());
+
+  // Odak modundaysa arkaplan resmini yeni dock'a uygula
+  const app = document.getElementById('app');
+  if (app && app.classList.contains('is-focus-mode')) {
+    const bg = store.settings().focusBgBase64;
+    if (bg) {
+      dock.style.backgroundImage = `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url("${bg}")`;
+      dock.style.backgroundSize = 'cover';
+      dock.style.backgroundPosition = 'center';
+    }
+  }
+
   if (active) {
     setTimeout(() => {
       dock.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
